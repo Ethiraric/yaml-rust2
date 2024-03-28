@@ -4,7 +4,7 @@
 
 use std::borrow::Cow;
 use std::ops::ControlFlow;
-use std::{collections::BTreeMap, convert::TryFrom, mem, ops::Index};
+use std::{collections::BTreeMap, convert::TryFrom, mem, ops::Index, ops::IndexMut};
 
 use encoding_rs::{Decoder, DecoderResult, Encoding};
 use hashlink::LinkedHashMap;
@@ -478,6 +478,23 @@ pub fn $name(&self) -> Option<$t> {
     );
 );
 
+macro_rules! define_as_mut_ref (
+    ($name:ident, $t:ty, $yt:ident) => (
+/// Get a mutable reference to the inner object in the YAML enum if it is a `$t`.
+///
+/// # Return
+/// If the variant of `self` is `Yaml::$yt`, return `Some(&$t)` with the `$t` contained. Otherwise,
+/// return `None`.
+#[must_use]
+pub fn $name(&mut self) -> Option<$t> {
+    match *self {
+        Yaml::$yt(ref mut v) => Some(v),
+        _ => None
+    }
+}
+    );
+);
+
 macro_rules! define_into (
     ($name:ident, $t:ty, $yt:ident) => (
 /// Get the inner object in the YAML enum if it is a `$t`.
@@ -502,6 +519,9 @@ impl Yaml {
     define_as_ref!(as_str, &str, String);
     define_as_ref!(as_hash, &Hash, Hash);
     define_as_ref!(as_vec, &Array, Array);
+
+    define_as_mut_ref!(as_mut_hash, &mut Hash, Hash);
+    define_as_mut_ref!(as_mut_vec, &mut Array, Array);
 
     define_into!(into_bool, bool, Boolean);
     define_into!(into_i64, i64, Integer);
@@ -641,6 +661,16 @@ impl<'a> Index<&'a str> for Yaml {
     }
 }
 
+impl<'a> IndexMut<&'a str> for Yaml {
+    fn index_mut(&mut self, idx: &'a str) -> &mut Yaml {
+        let key = Yaml::String(idx.to_owned());
+        match self.as_mut_hash() {
+            Some(h) => h.get_mut(&key).unwrap(),
+            None => panic!("Not a hash type"),
+        }
+    }
+}
+
 impl Index<usize> for Yaml {
     type Output = Yaml;
 
@@ -652,6 +682,31 @@ impl Index<usize> for Yaml {
             v.get(&key).unwrap_or(&BAD_VALUE)
         } else {
             &BAD_VALUE
+        }
+    }
+}
+
+impl IndexMut<usize> for Yaml {
+    fn index_mut(&mut self, idx: usize) -> &mut Yaml {
+        if let Some(v) = self.as_mut_vec() {
+            let yaml = v.get_mut(idx).unwrap();
+
+            // This transmute just casts the lifetime away. Since Rust only
+            // has SESE regions, this early return cannot be worked out and
+            // such that the borrow region of self includes the whole block.
+            // The explixit lifetimes in the function signature ensure that
+            // this is safe.
+            // From: https://github.com/image-rs/image-gif/blob/c814b40079a36af0b26adc36237f2c742d69c994/src/reader/decoder.rs#L227-L229
+            unsafe {
+                return mem::transmute::<&mut Yaml, &mut Yaml>(yaml);
+            }
+        }
+
+        if let Some(v) = self.as_mut_hash() {
+            let key = Yaml::Integer(i64::try_from(idx).unwrap());
+            v.get_mut(&key).unwrap()
+        } else {
+            panic!("Not a hash or verctor type");
         }
     }
 }
