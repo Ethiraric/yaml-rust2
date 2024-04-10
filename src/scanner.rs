@@ -463,9 +463,13 @@ impl<T: Iterator<Item = char>> Scanner<T> {
             return;
         }
         for _ in 0..(count - self.buffer.len()) {
-            self.buffer
+            if self
+                .buffer
                 .push_back(self.rdr.next().unwrap_or('\0'))
-                .unwrap();
+                .is_err()
+            {
+                break;
+            }
         }
     }
 
@@ -1470,7 +1474,7 @@ impl<T: Iterator<Item = char>> Scanner<T> {
     fn decrease_flow_level(&mut self) {
         if self.flow_level > 0 {
             self.flow_level -= 1;
-            self.simple_keys.pop().unwrap();
+            self.simple_keys.pop();
         }
     }
 
@@ -1777,7 +1781,7 @@ impl<T: Iterator<Item = char>> Scanner<T> {
             // Our last character read is stored in `c`. It is either an EOF or a break. In any
             // case, we need to push it back into `self.buffer` so it may be properly read
             // after. We must not insert it in `string`.
-            self.buffer.push_back(c).unwrap();
+            self.buffer.push_back(c).ok();
 
             // We need to manually update our position; we haven't called a `skip` function.
             self.mark.col += line_buffer.len();
@@ -2094,13 +2098,13 @@ impl<T: Iterator<Item = char>> Scanner<T> {
             '/' => ret = '/',
             '\\' => ret = '\\',
             // Unicode next line (#x85)
-            'N' => ret = char::from_u32(0x85).unwrap(),
+            'N' => ret = char::from_u32(0x85).unwrap_or('\n'),
             // Unicode non-breaking space (#xA0)
-            '_' => ret = char::from_u32(0xA0).unwrap(),
+            '_' => ret = char::from_u32(0xA0).unwrap_or(' '),
             // Unicode line separator (#x2028)
-            'L' => ret = char::from_u32(0x2028).unwrap(),
+            'L' => ret = char::from_u32(0x2028).unwrap_or('\n'),
             // Unicode paragraph separator (#x2029)
-            'P' => ret = char::from_u32(0x2029).unwrap(),
+            'P' => ret = char::from_u32(0x2029).unwrap_or('\n'),
             'x' => code_length = 2,
             'u' => code_length = 4,
             'U' => code_length = 8,
@@ -2323,7 +2327,12 @@ impl<T: Iterator<Item = char>> Scanner<T> {
 
     /// Fetch a value from a mapping (after a `:`).
     fn fetch_value(&mut self) -> ScanResult {
-        let sk = self.simple_keys.last().unwrap().clone();
+        let Some(sk) = self.simple_keys.last().cloned() else {
+            return Err(ScanError::new(
+                self.mark,
+                "internal scanner error: simple_keys is empty",
+            ));
+        };
         let start_mark = self.mark;
         self.implicit_flow_mapping = self.flow_level > 0 && !self.flow_mapping_started;
 
@@ -2365,7 +2374,9 @@ impl<T: Iterator<Item = char>> Scanner<T> {
             );
             self.roll_one_col_indent();
 
-            self.simple_keys.last_mut().unwrap().possible = false;
+            if let Some(ref mut key) = self.simple_keys.last_mut() {
+                key.possible = false;
+            }
             self.disallow_simple_key();
         } else {
             if self.implicit_flow_mapping {
@@ -2447,10 +2458,14 @@ impl<T: Iterator<Item = char>> Scanner<T> {
             return;
         }
         while self.indent > col {
-            let indent = self.indents.pop().unwrap();
-            self.indent = indent.indent;
-            if indent.needs_block_end {
-                self.tokens.push_back(Token(self.mark, TokenType::BlockEnd));
+            if let Some(indent) = self.indents.pop() {
+                self.indent = indent.indent;
+                if indent.needs_block_end {
+                    self.tokens.push_back(Token(self.mark, TokenType::BlockEnd));
+                }
+            } else {
+                self.indent = 0;
+                break;
             }
         }
     }
@@ -2486,7 +2501,10 @@ impl<T: Iterator<Item = char>> Scanner<T> {
         if self.simple_key_allowed {
             let required = self.flow_level == 0
                 && self.indent == (self.mark.col as isize)
-                && self.indents.last().unwrap().needs_block_end;
+                && match self.indents.last() {
+                    Some(indent) => indent.needs_block_end,
+                    None => false,
+                };
             let mut sk = SimpleKey::new(self.mark);
             sk.possible = true;
             sk.required = required;
@@ -2498,7 +2516,9 @@ impl<T: Iterator<Item = char>> Scanner<T> {
     }
 
     fn remove_simple_key(&mut self) -> ScanResult {
-        let last = self.simple_keys.last_mut().unwrap();
+        let Some(last) = self.simple_keys.last_mut() else {
+            return Err(ScanError::new(self.mark, "simple key missing"));
+        };
         if last.possible && last.required {
             return Err(ScanError::new(self.mark, "simple key expected"));
         }
