@@ -662,7 +662,7 @@ impl Yaml {
             }
         }
         match v {
-            "~" | "null" => Yaml::Null,
+            "" | "~" | "null" => Yaml::Null,
             "true" => Yaml::Boolean(true),
             "false" => Yaml::Boolean(false),
             _ => {

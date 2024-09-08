@@ -156,7 +156,7 @@ fn test_github_27() {
     let s = "&a";
     let out = YamlLoader::load_from_str(s).unwrap();
     let doc = &out[0];
-    assert_eq!(doc.as_str().unwrap(), "");
+    assert_eq!(*doc, Yaml::Null);
 }
 
 #[test]

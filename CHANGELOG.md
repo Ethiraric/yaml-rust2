@@ -2,6 +2,10 @@
 
 ## Upcoming
 
+**Bug fixes**
+- ([#37](https://github.com/Ethiraric/yaml-rust2/pull/37))
+  Parse empty scalars as `""` instead of `"~"`.
+
 ## v0.8.1
 
 **Bug fixes**

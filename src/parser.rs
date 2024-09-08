@@ -92,7 +92,7 @@ impl Event {
     /// Create an empty scalar.
     fn empty_scalar() -> Event {
         // a null scalar
-        Event::Scalar("~".to_owned(), TScalarStyle::Plain, 0, None)
+        Event::Scalar(String::new(), TScalarStyle::Plain, 0, None)
     }
 
     /// Create an empty scalar with the given anchor.
