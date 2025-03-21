@@ -2,6 +2,9 @@
 
 ## Upcoming
 
+**Breaking changes**
+- Parse `.NaN` as float instead of `NaN`.
+
 ## v0.10.0
 
 **Breaking Changes**
@@ -54,7 +57,7 @@
     `Yaml::Hash` for `&'a str`
 
 - Use cargo features
-  
+
   This allows for more fine-grained control over MSRV and to completely remove
   debug code from the library when it is consumed.
 
