@@ -70,7 +70,7 @@ fn parse_f64(v: &str) -> Option<f64> {
         ".nan" | ".NaN" | ".NAN" => Some(f64::NAN),
         // Test that `v` contains a digit so as not to pass in strings like `inf`,
         // which rust will parse as a float
-        _ if v.as_bytes().into_iter().any(|b| b.is_ascii_digit()) => v.parse::<f64>().ok(),
+        _ if v.as_bytes().iter().any(u8::is_ascii_digit) => v.parse::<f64>().ok(),
         _ => None,
     }
 }

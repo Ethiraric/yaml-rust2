@@ -490,6 +490,7 @@ a: bar";
 
 #[test]
 fn test_nominal_float_parse() {
+    use std::fmt::Write;
     // back test for
     // https://github.com/Ethiraric/yaml-rust2/issues/50
 
@@ -505,20 +506,22 @@ fn test_nominal_float_parse() {
     // Every single one of these values should be parsed as a string in yaml,
     // but would be parsed as a float according to rust. This test verifies they
     // all end up parsed as strings.
+
     let raw = &["nan", "NAN", "NaN", "inf", "infinity", "Infinity"]
-        .into_iter()
-        .map(|base| [format!("+{base}"), format!("-{base}"), base.to_string()])
-        .flatten()
-        .map(|v| format!("- {v}\n"))
-        .collect::<String>();
+        .iter()
+        .fold(String::new(), |mut output, base| {
+            let _ = write!(output, "- +{base}\n- -{base}\n- {base}\n");
+            output
+        });
 
     println!("parsing {raw}");
 
-    let doc = YamlLoader::load_from_str(&raw).expect("could not parse document");
+    let doc = YamlLoader::load_from_str(raw).expect("could not parse document");
+    let doc = doc.into_iter().next().unwrap();
 
-    assert!(doc[0].is_array());
+    assert!(doc.is_array());
 
-    for it in doc[0].clone().into_iter() {
+    for it in doc {
         assert!(it.as_str().is_some());
     }
 }
