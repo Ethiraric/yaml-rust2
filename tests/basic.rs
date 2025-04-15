@@ -487,3 +487,38 @@ a: foo
 a: bar";
     assert!(YamlLoader::load_from_str(s).is_err());
 }
+
+#[test]
+fn test_nominal_float_parse() {
+    // back test for
+    // https://github.com/Ethiraric/yaml-rust2/issues/50
+
+    // Test cases derived from https://doc.rust-lang.org/std/primitive.f64.html#impl-FromStr-for-f64
+
+    // Generates a document that looks like so:
+    // ```yaml
+    // - +nan
+    // - -nan
+    // - nan
+    // - +NAN
+    // ```
+    // Every single one of these values should be parsed as a string in yaml,
+    // but would be parsed as a float according to rust. This test verifies they
+    // all end up parsed as strings.
+    let raw = &["nan", "NAN", "NaN", "inf", "infinity", "Infinity"]
+        .into_iter()
+        .map(|base| [format!("+{base}"), format!("-{base}"), base.to_string()])
+        .flatten()
+        .map(|v| format!("- {v}\n"))
+        .collect::<String>();
+
+    println!("parsing {raw}");
+
+    let doc = YamlLoader::load_from_str(&raw).expect("could not parse document");
+
+    assert!(doc[0].is_array());
+
+    for it in doc[0].clone().into_iter() {
+        assert!(it.as_str().is_some());
+    }
+}

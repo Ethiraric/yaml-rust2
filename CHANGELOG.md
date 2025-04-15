@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+- Parse `(?i)[+-]?(?:inf|infinity|nan)` as strings instead of floats
+
 ## v0.10.1
 
 **Bug fixes**
