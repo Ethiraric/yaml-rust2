@@ -13,9 +13,15 @@ commands:
     - check/fmt
     - build
     - test
+    - check/msrv
     - check/profile
   check/clippy: cargo clippy --all-targets "$@" -- -D warnings
   check/fmt: cargo fmt --check
+  check/msrv: |
+    if type cargo-msrv >/dev/null 2>&1
+    then
+        cargo msrv verify
+    fi
   check/profile: |
     cargo build \
         --profile=release-lto \
