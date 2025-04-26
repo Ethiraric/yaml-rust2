@@ -316,7 +316,7 @@ pub type YAMLDecodingTrapFn = fn(
 
 /// The behavior [`YamlDecoder`] must have when an decoding error occurs.
 #[cfg(feature = "encoding")]
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone)]
 pub enum YAMLDecodingTrap {
     /// Ignore the offending bytes, remove them from the output.
     Ignore,
@@ -327,6 +327,19 @@ pub enum YAMLDecodingTrap {
     /// Call the user-supplied function upon decoding malformation.
     Call(YAMLDecodingTrapFn),
 }
+
+impl PartialEq for YAMLDecodingTrap {
+    fn eq(&self, other: &YAMLDecodingTrap) -> bool {
+        match (self, other) {
+            (YAMLDecodingTrap::Call(self_fn), YAMLDecodingTrap::Call(other_fn)) => {
+                *self_fn as usize == *other_fn as usize
+            }
+            (x, y) => x == y,
+        }
+    }
+}
+
+impl Eq for YAMLDecodingTrap {}
 
 /// `YamlDecoder` is a `YamlLoader` builder that allows you to supply your own encoding error trap.
 /// For example, to read a YAML file while ignoring Unicode decoding errors you can set the

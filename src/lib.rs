@@ -36,7 +36,7 @@
 //! #### `encoding` (_enabled by default_)
 //! Enables encoding-aware decoding of Yaml documents.
 //!
-//! The MSRV for this feature is `1.70.0`.
+//! The MSRV for this feature is `1.65.0`.
 //!
 //! #### `debug_prints`
 //! Enables the `debug` module and usage of debug prints in the scanner and the parser. Do not
