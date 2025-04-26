@@ -15,12 +15,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - run: rustup toolchain install stable --profile minimal --component rustfmt --component clippy --no-self-update
-      - run: cargo install garden-tools
+      - run: cargo install cargo-msrv garden-tools
       - uses: Swatinem/rust-cache@v2
       - name: Run clippy checks
         run: garden check/clippy -vv
       - name: Run format checks
         run: garden check/fmt -vv
+      - name: Rust MSRV check
+        run: garden check/msrv -vv
 
   test:
     name: Test using Rust ${{ matrix.rust }} on ${{ matrix.os }}
