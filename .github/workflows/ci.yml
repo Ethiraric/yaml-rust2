@@ -12,11 +12,13 @@ jobs:
     name: Lints and checks
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - run: rustup toolchain install stable --profile minimal --component rustfmt --component clippy --no-self-update
-      - run: cargo install cargo-msrv garden-tools
+      - run: date +%W >weekly
       - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ runner.os }}-lints-${{ hashFiles('weekly') }}
+      - run: cargo install cargo-msrv garden-tools
       - name: Run clippy checks
         run: garden check/clippy -vv
       - name: Run format checks
@@ -33,11 +35,13 @@ jobs:
         rust: [stable]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - run: git submodule update --init
+      - uses: actions/checkout@v4
+      - run: git submodule update --init --depth=1
       - run: rustup toolchain install ${{ matrix.rust }} --profile minimal --no-self-update
+      - run: date +%W >weekly
       - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.rust }}-${{ matrix.os }}-test-${{ hashFiles('weekly') }}
       - name: Run build
         run: cargo build
       - name: Run tests
