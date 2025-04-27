@@ -21,6 +21,7 @@ commands:
     if type cargo-msrv >/dev/null 2>&1
     then
         cargo msrv verify
+        cargo msrv verify --rust-version 1.70.0 --features debug_prints
     fi
   check/profile: |
     cargo build \
