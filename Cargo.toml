@@ -25,7 +25,7 @@ encoding_rs = { version = "0.8.33", optional = true }
 hashlink = "0.10"
 
 [dev-dependencies]
-libtest-mimic = "0.4.0"
+libtest-mimic = "0.8.0"
 quickcheck = "1.0"
 
 [profile.release-lto]
