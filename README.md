@@ -114,15 +114,10 @@ use yaml_rust::{YamlLoader, YamlEmitter};
 
 Licensed under either of
 
- * Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
- * MIT license (http://opensource.org/licenses/MIT)
+ * the MIT License (http://opensource.org/licenses/MIT)
+ * both the MIT License and the Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
 
 at your option.
-
-Since this repository was originally maintained by
-[chyh1990](https://github.com/chyh1990), there are 2 sets of licenses.
-A license of each set must be included in redistributions. See the
-[LICENSE](LICENSE) file for more details.
 
 You can find licences in the [`.licenses`](.licenses) subfolder.
 
