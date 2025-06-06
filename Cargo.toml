@@ -1,18 +1,25 @@
 [package]
 name = "yaml-rust2"
-version = "0.10.2"
+version = "0.10.3"
 authors = [
   "Yuheng Chen <yuhengchen@sensetime.com>",
   "Ethiraric <ethiraric@gmail.com>",
   "David Aguilar <davvid@gmail.com>"
 ]
 documentation = "https://docs.rs/yaml-rust2"
-license = "MIT OR (MIT AND Apache-2.0)"
+license = "MIT OR Apache-2.0"
 description = "A fully YAML 1.2 compliant YAML parser"
 repository = "https://github.com/Ethiraric/yaml-rust2"
 readme = "README.md"
 edition = "2021"
 rust-version = "1.65.0"
+exclude = [
+  # We don't need the documents either.
+  "/documents",
+  # Exclude the `yaml-test-suite` from the package. This removes the need to
+  # add its license to the package.
+  "/tests/yaml-test-suite"
+]
 
 [features]
 default = [ "encoding" ]

@@ -2,6 +2,13 @@
 
 ## Upcoming
 
+## v0.10.3
+
+**Changes**
+
+- Exclude `yaml-test-suite` from the Cargo package.
+  This reverts the license changes from last version.
+
 ## v0.10.2
 
 **Bug fixes**

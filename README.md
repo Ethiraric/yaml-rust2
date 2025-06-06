@@ -19,11 +19,10 @@ memory safety and other benefits from the Rust language.
 
 ## Quick Start
 
-Add the following to the Cargo.toml of your project:
+To add `yaml-rust2` to your project, run the following in the root of your project:
 
-```toml
-[dependencies]
-yaml-rust2 = "0.9"
+```sh
+cargo add yaml-rust2
 ```
 
 Use `yaml_rust2::YamlLoader` to load YAML documents and access them as `Yaml` objects:

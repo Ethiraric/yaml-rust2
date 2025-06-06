@@ -9,9 +9,8 @@
 //! This crate is [on github](https://github.com/Ethiraric/yaml-rust2) and can be used by adding
 //! `yaml-rust2` to the dependencies in your project's `Cargo.toml`.
 //!
-//! ```toml
-//! [dependencies]
-//! yaml-rust2 = "0.10.2"
+//! ```sh
+//! cargo add yaml-rust2
 //! ```
 //!
 //! # Examples
