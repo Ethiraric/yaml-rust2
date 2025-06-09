@@ -8,6 +8,7 @@
 
 - Exclude `yaml-test-suite` from the Cargo package.
   This reverts the license changes from last version.
+- 399f481: Bump `libtest-mimic` from dev-dependencies
 
 ## v0.10.2
 
