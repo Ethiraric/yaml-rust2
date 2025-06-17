@@ -328,6 +328,7 @@ pub enum YAMLDecodingTrap {
     Call(YAMLDecodingTrapFn),
 }
 
+#[cfg(feature = "encoding")]
 impl PartialEq for YAMLDecodingTrap {
     fn eq(&self, other: &YAMLDecodingTrap) -> bool {
         match (self, other) {
@@ -339,6 +340,7 @@ impl PartialEq for YAMLDecodingTrap {
     }
 }
 
+#[cfg(feature = "encoding")]
 impl Eq for YAMLDecodingTrap {}
 
 /// `YamlDecoder` is a `YamlLoader` builder that allows you to supply your own encoding error trap.
