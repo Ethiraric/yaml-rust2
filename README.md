@@ -114,7 +114,7 @@ use yaml_rust::{YamlLoader, YamlEmitter};
 Licensed under either of
 
  * the MIT License (http://opensource.org/licenses/MIT)
- * both the MIT License and the Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+ * the Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
 
 at your option.
 
