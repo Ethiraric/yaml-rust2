@@ -118,8 +118,6 @@ Licensed under either of
 
 at your option.
 
-You can find licences in the [`.licenses`](.licenses) subfolder.
-
 ## Contribution
 
 [Fork this repository](https://github.com/Ethiraric/yaml-rust2/fork) and
