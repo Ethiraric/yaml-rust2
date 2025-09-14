@@ -2,6 +2,11 @@
 
 ## Upcoming
 
+**Bug fixes**
+- Parse `True`, `TRUE`, `False` and `FALSE` as bools instead of strings.
+  This is in line with the [core
+  schema](https://yaml.org/spec/1.2.2/#core-schema).
+
 ## v0.10.3
 
 **Changes**

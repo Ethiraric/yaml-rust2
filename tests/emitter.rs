@@ -125,8 +125,8 @@ string2: "true"
 string3: "false"
 string4: "~"
 null0: ~
-[true, false]: real_bools
-[True, TRUE, False, FALSE, y,Y,yes,Yes,YES,n,N,no,No,NO,on,On,ON,off,Off,OFF]: false_bools
+[true, false, True, False, TRUE, FALSE]: real_bools
+[y,Y,yes,Yes,YES,n,N,no,No,NO,on,On,ON,off,Off,OFF]: false_bools
 bool0: true
 bool1: false"#;
     let expected = r#"---
@@ -138,12 +138,12 @@ string4: "~"
 null0: ~
 ? - true
   - false
+  - true
+  - false
+  - true
+  - false
 : real_bools
-? - "True"
-  - "TRUE"
-  - "False"
-  - "FALSE"
-  - "y"
+? - "y"
   - "Y"
   - "yes"
   - "Yes"

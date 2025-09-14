@@ -157,13 +157,11 @@ impl YamlLoader {
                 {
                     if handle == "tag:yaml.org,2002:" {
                         match suffix.as_ref() {
-                            "bool" => {
-                                // "true" or "false"
-                                match v.parse::<bool>() {
-                                    Err(_) => Yaml::BadValue,
-                                    Ok(v) => Yaml::Boolean(v),
-                                }
-                            }
+                            "bool" => match v.as_str() {
+                                "true" | "True" | "TRUE" => Yaml::Boolean(true),
+                                "false" | "False" | "FALSE" => Yaml::Boolean(false),
+                                _ => Yaml::BadValue,
+                            },
                             "int" => match v.parse::<i64>() {
                                 Err(_) => Yaml::BadValue,
                                 Ok(v) => Yaml::Integer(v),
@@ -672,6 +670,11 @@ impl Yaml {
     /// assert!(matches!(Yaml::from_str("~"), Yaml::Null));
     /// assert!(matches!(Yaml::from_str("null"), Yaml::Null));
     /// assert!(matches!(Yaml::from_str("true"), Yaml::Boolean(true)));
+    /// assert!(matches!(Yaml::from_str("True"), Yaml::Boolean(true)));
+    /// assert!(matches!(Yaml::from_str("TRUE"), Yaml::Boolean(true)));
+    /// assert!(matches!(Yaml::from_str("false"), Yaml::Boolean(false)));
+    /// assert!(matches!(Yaml::from_str("False"), Yaml::Boolean(false)));
+    /// assert!(matches!(Yaml::from_str("FALSE"), Yaml::Boolean(false)));
     /// assert!(matches!(Yaml::from_str("3.14"), Yaml::Real(_)));
     /// assert!(matches!(Yaml::from_str("foo"), Yaml::String(_)));
     /// ```
@@ -692,8 +695,8 @@ impl Yaml {
         }
         match v {
             "" | "~" | "null" => Yaml::Null,
-            "true" => Yaml::Boolean(true),
-            "false" => Yaml::Boolean(false),
+            "true" | "True" | "TRUE" => Yaml::Boolean(true),
+            "false" | "False" | "FALSE" => Yaml::Boolean(false),
             _ => {
                 if let Ok(integer) = v.parse::<i64>() {
                     Yaml::Integer(integer)
