@@ -43,14 +43,14 @@ lto = true
 name = "yaml-test-suite"
 harness = false
 
-[[bin]]
+[[example]]
 name = "dump_events"
 path = "tools/dump_events.rs"
 
-[[bin]]
+[[example]]
 name = "time_parse"
 path = "tools/time_parse.rs"
 
-[[bin]]
+[[example]]
 name = "run_bench"
 path = "tools/run_bench.rs"
