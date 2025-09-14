@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+## v0.10.4
+
 **Bug fixes**
 - Parse `True`, `TRUE`, `False` and `FALSE` as bools instead of strings.
   This is in line with the [core

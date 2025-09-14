@@ -1,6 +1,6 @@
 [package]
 name = "yaml-rust2"
-version = "0.10.3"
+version = "0.10.4"
 authors = [
   "Yuheng Chen <yuhengchen@sensetime.com>",
   "Ethiraric <ethiraric@gmail.com>",
