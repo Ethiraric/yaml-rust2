@@ -579,7 +579,7 @@ impl<T: Iterator<Item = char>> Parser<T> {
                     if tags.contains_key(handle) {
                         return Err(ScanError::new(*mark, "the TAG directive must only be given at most once per handle in the same document"));
                     }
-                    tags.insert(handle.to_string().clone(), prefix.to_string());
+                    tags.insert(handle.clone(), prefix.clone());
                 }
                 _ => break,
             }
@@ -1042,7 +1042,7 @@ impl<T: Iterator<Item = char>> Parser<T> {
             // overridden.
             match self.tags.get("!!") {
                 Some(prefix) => Ok(Tag {
-                    handle: prefix.to_string().clone(),
+                    handle: prefix.clone(),
                     suffix,
                 }),
                 None => Ok(Tag {
@@ -1054,7 +1054,7 @@ impl<T: Iterator<Item = char>> Parser<T> {
             // "!" introduces a local tag. Local tags may have their prefix overridden.
             match self.tags.get("") {
                 Some(prefix) => Ok(Tag {
-                    handle: prefix.to_string().clone(),
+                    handle: prefix.clone(),
                     suffix,
                 }),
                 None => Ok(Tag {
@@ -1067,7 +1067,7 @@ impl<T: Iterator<Item = char>> Parser<T> {
             let prefix = self.tags.get(handle);
             if let Some(prefix) = prefix {
                 Ok(Tag {
-                    handle: prefix.to_string().clone(),
+                    handle: prefix.clone(),
                     suffix,
                 })
             } else {
