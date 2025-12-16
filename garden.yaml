@@ -50,6 +50,7 @@ trees:
     url: "git@github.com:Ethiraric/yaml-rust2.git"
     remotes:
       davvid: "git@github.com:davvid/yaml-rust2.git"
+      glorenzop: "git@github.com:glorenzop/yaml-rust2.git"
       yaml-rust: "git@github.com:chyh1990/yaml-rust.git"
     gitconfig:
       # Access yaml-rust2 pull requests as yaml-rust2/pull/*
