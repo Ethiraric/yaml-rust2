@@ -2,6 +2,12 @@
 
 ## Upcoming
 
+## v0.11.0
+
+**Changes**
+- The `actions/checkout` github actions dependency was updated.
+- The `hashlink` dependency was updated to `v0.11`.
+
 ## v0.10.4
 
 **Bug fixes**
