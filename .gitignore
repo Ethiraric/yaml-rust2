@@ -1,4 +1,7 @@
-target
 *.swp
 /perf.*
+/target
+/tools/gen_large_yaml/target
 /coverage.sh
+/doc
+/pages
