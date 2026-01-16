@@ -54,6 +54,7 @@ pub struct YamlEmitter<'a> {
     compact: bool,
     level: isize,
     multiline_strings: bool,
+    quote_values: bool,
 }
 
 /// A convenience alias for emitter functions that may fail without returning a value.
@@ -131,6 +132,7 @@ impl<'a> YamlEmitter<'a> {
             compact: true,
             level: -1,
             multiline_strings: false,
+            quote_values: false,
         }
     }
 
@@ -186,6 +188,17 @@ impl<'a> YamlEmitter<'a> {
         self.multiline_strings
     }
 
+    /// Quote all values by default (not only strings which have to be escaped).
+    pub fn quote_values(&mut self, quote_values: bool) {
+        self.quote_values = quote_values;
+    }
+
+    /// Determine if this emitter will quote all values by default.
+    #[must_use]
+    pub fn is_quote_values(&self) -> bool {
+        self.quote_values
+    }
+
     /// Dump Yaml to an output stream.
     /// # Errors
     /// Returns `EmitError` when an error occurs.
@@ -193,7 +206,7 @@ impl<'a> YamlEmitter<'a> {
         // write DocumentStart
         writeln!(self.writer, "---")?;
         self.level = -1;
-        self.emit_node(doc)
+        self.emit_node(doc, false)
     }
 
     fn write_indent(&mut self) -> EmitResult {
@@ -208,7 +221,7 @@ impl<'a> YamlEmitter<'a> {
         Ok(())
     }
 
-    fn emit_node(&mut self, node: &Yaml) -> EmitResult {
+    fn emit_node(&mut self, node: &Yaml, is_value: bool) -> EmitResult {
         match *node {
             Yaml::Array(ref v) => self.emit_array(v),
             Yaml::Hash(ref h) => self.emit_hash(h),
@@ -218,7 +231,7 @@ impl<'a> YamlEmitter<'a> {
                     && char_traits::is_valid_literal_block_scalar(v)
                 {
                     self.emit_literal_block(v)?;
-                } else if need_quotes(v) {
+                } else if is_value && self.quote_values || need_quotes(v) {
                     escape_str(self.writer, v)?;
                 } else {
                     write!(self.writer, "{v}")?;
@@ -226,19 +239,15 @@ impl<'a> YamlEmitter<'a> {
                 Ok(())
             }
             Yaml::Boolean(v) => {
-                if v {
-                    self.writer.write_str("true")?;
-                } else {
-                    self.writer.write_str("false")?;
-                }
+                self.write_value(["false", "true"][usize::from(v)])?;
                 Ok(())
             }
             Yaml::Integer(v) => {
-                write!(self.writer, "{v}")?;
+                self.write_value(v.to_string().as_str())?;
                 Ok(())
             }
             Yaml::Real(ref v) => {
-                write!(self.writer, "{v}")?;
+                self.write_value(v.clone().as_str())?;
                 Ok(())
             }
             Yaml::Null | Yaml::BadValue => {
@@ -248,6 +257,17 @@ impl<'a> YamlEmitter<'a> {
             // XXX(chenyh) Alias
             Yaml::Alias(_) => Ok(()),
         }
+    }
+
+    fn write_value(&mut self, s: &str) -> Result<(), EmitError> {
+        let value = format!(
+            "{}{}{}",
+            if self.is_quote_values() { "\"" } else { "" },
+            s,
+            if self.is_quote_values() { "\"" } else { "" }
+        );
+        self.writer.write_str(value.as_str())?;
+        Ok(())
     }
 
     fn emit_literal_block(&mut self, v: &str) -> EmitResult {
@@ -307,7 +327,7 @@ impl<'a> YamlEmitter<'a> {
                     write!(self.writer, ":")?;
                     self.emit_val(true, v)?;
                 } else {
-                    self.emit_node(k)?;
+                    self.emit_node(k, false)?;
                     write!(self.writer, ":")?;
                     self.emit_val(false, v)?;
                 }
@@ -347,7 +367,7 @@ impl<'a> YamlEmitter<'a> {
             }
             _ => {
                 write!(self.writer, " ")?;
-                self.emit_node(val)
+                self.emit_node(val, true)
             }
         }
     }
@@ -430,5 +450,28 @@ mod test {
         let mut emitter = YamlEmitter::new(&mut output);
         emitter.multiline_strings(true);
         emitter.dump(&parsed[0]).unwrap();
+    }
+
+    #[test]
+    fn test_quote_values() {
+        let input =
+            r#"{string: foo, integer: 42, real: 1.2, boolean: true, array: [1], hash: {a: 1}}"#;
+        let parsed = YamlLoader::load_from_str(input).unwrap();
+        let mut output = String::new();
+        let mut emitter = YamlEmitter::new(&mut output);
+        emitter.quote_values(true);
+        emitter.dump(&parsed[0]).unwrap();
+        assert_eq!(
+            output,
+            r#"---
+string: "foo"
+integer: "42"
+real: "1.2"
+boolean: "true"
+array:
+  - "1"
+hash:
+  a: "1""#
+        );
     }
 }
