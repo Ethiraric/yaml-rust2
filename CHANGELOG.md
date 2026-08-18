@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.12.0
+
+**Changes**
+- The minimum supported Rust version is now v1.85.0.
+
 ## v0.11.1
 
 **Changes**
