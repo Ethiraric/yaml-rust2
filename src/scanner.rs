@@ -2463,7 +2463,7 @@ impl<T: Iterator<Item = char>> Scanner<T> {
             && self
                 .indents
                 .last()
-                .map_or(false, |indent| indent.needs_block_end)
+                .is_some_and(|indent| indent.needs_block_end)
         {
             self.indents.push(Indent {
                 indent: self.indent,
