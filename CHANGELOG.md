@@ -4,6 +4,7 @@
 
 **Changes**
 - The minimum supported Rust version is now v1.85.0.
+- `hashlink` was upgraded to v0.12.1.
 - `quickcheck` (dev-only dependency) was upgraded to v1.1.0.
 - `toml` (dev-only dependency) was upgraded to v1.1.4.
 
