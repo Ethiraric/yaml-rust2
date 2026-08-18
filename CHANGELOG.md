@@ -1,6 +1,10 @@
 # Changelog
 
-## Upcoming
+## v0.11.1
+
+**Changes**
+- ([#78](https://github.com/Ethiraric/yaml-rust2/issues/78)) Fix parsing
+  short YAML documents to avoid infinite loops.
 
 ## v0.11.0
 
@@ -12,8 +16,7 @@
 
 **Bug fixes**
 - Parse `True`, `TRUE`, `False` and `FALSE` as bools instead of strings.
-  This is in line with the [core
-  schema](https://yaml.org/spec/1.2.2/#core-schema).
+  This is in line with the [core schema](https://yaml.org/spec/1.2.2/#core-schema).
 
 ## v0.10.3
 
