@@ -44,7 +44,7 @@ pub enum TScalarStyle {
 /// A location in a yaml document.
 #[derive(Clone, Copy, PartialEq, Debug, Eq)]
 pub struct Marker {
-    /// The index (in chars) in the input string.
+    /// The index (in bytes) in the input string.
     index: usize,
     /// The line (1-indexed).
     line: usize,
