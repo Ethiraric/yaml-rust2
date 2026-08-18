@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.13.0
+
+**Development**:
+- Applied clippy fixes.
+
 ## v0.12.0
 
 **Changes**:
