@@ -2,7 +2,7 @@
 
 ## v0.12.0
 
-**Changes**
+**Changes**:
 - The minimum supported Rust version is now v1.85.0.
 - `hashlink` was upgraded to v0.12.1.
 - `quickcheck` (dev-only dependency) was upgraded to v1.1.0.
@@ -12,48 +12,47 @@
 
 ## v0.11.1
 
-**Changes**
+**Changes**:
 - ([#78](https://github.com/Ethiraric/yaml-rust2/issues/78)) Fix parsing
   short YAML documents to avoid infinite loops.
 
 ## v0.11.0
 
-**Changes**
+**Changes**:
 - The `actions/checkout` github actions dependency was updated.
 - The `hashlink` dependency was updated to `v0.11`.
 
 ## v0.10.4
 
-**Bug fixes**
+**Bug fixes**:
 - Parse `True`, `TRUE`, `False` and `FALSE` as bools instead of strings.
   This is in line with the [core schema](https://yaml.org/spec/1.2.2/#core-schema).
 
 ## v0.10.3
 
-**Changes**
-
+**Changes**:
 - Exclude `yaml-test-suite` from the Cargo package.
   This reverts the license changes from last version.
 - 399f481: Bump `libtest-mimic` from dev-dependencies
 
 ## v0.10.2
 
-**Bug fixes**
+**Bug fixes**:
 - Parse `(?i)[+-]?(?:inf|infinity|nan)` as strings instead of floats
 
-**Changes**
+**Changes**:
 - Merge license files and respect `yaml-test-suite`  MIT license. This means we
   now correctly state that this crate can not be licensed under only the
   Apache-2.0 license.
 
 ## v0.10.1
 
-**Bug fixes**
+**Bug fixes**:
 - Parse `.NaN` as float instead of `NaN`.
 
 ## v0.10.0
 
-**Breaking Changes**
+**Breaking Changes**:
 - Update dependencies.
 
   `hashlink` had a bogus requirement of `>= 0.8, < 0.10`, sorry. As mentioned
@@ -61,12 +60,12 @@
   range requirements shouldn't be used and I haven't been vigilant enough when
   reviewing. The requirement is now set to `0.10`.
 
-**Changes**
+**Changes**:
 - Force quotes on `y` and `n` to appease the YAML 1.1 lords.
 
 ## v0.9.0
 
-**Breaking Changes**
+**Breaking Changes**:
 - Update dependencies.
 
   Since `hashlink` is exposed (through `Yaml::Hash`) and has been updated from
@@ -76,25 +75,25 @@
   [hashlink's v0.9.0
   changelog](https://github.com/kyren/hashlink/releases/tag/v0.9.0)).
 
-**Bug fixes**
+**Bug fixes**:
 - ([#37](https://github.com/Ethiraric/yaml-rust2/pull/37))
   Parse empty scalars as `""` instead of `"~"`.
 
-**Features**
+**Features**:
 - Add `Yaml::is_hash`.
 - Add better doccomments to the `Index` and `IntoIterator` implementations for
   `Yaml` to better explain their quirks and design decisions.
 
 ## v0.8.1
 
-**Bug fixes**
+**Bug fixes**:
 - ([#29](https://github.com/Ethiraric/yaml-rust2/issues/29)) Fix parsing
   failing for deeply indented scalar blocks.
 
 - ([#21-comment](https://github.com/Ethiraric/yaml-rust2/issues/21#issuecomment-2053513507))
   Fix parsing failing with comments immediately following a YAML tag.
 
-**Features**
+**Features**:
 
 - ([#19](https://github.com/Ethiraric/yaml-rust2/pull/19)) `Yaml` now
   implements `IndexMut<usize>` and `IndexMut<&'a str>`. These functions may not
