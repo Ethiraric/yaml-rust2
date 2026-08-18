@@ -9,7 +9,6 @@ before_commit:
   cargo test --release
   cargo test --doc
   cargo test --release --no-default-features
-  cargo build --profile=release-lto --package gen_large_yaml --bin gen_large_yaml --manifest-path tools/gen_large_yaml/Cargo.toml
   RUSTDOCFLAGS="-D warnings" cargo doc --all-features
 
 ethi_bench:

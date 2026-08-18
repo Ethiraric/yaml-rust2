@@ -68,7 +68,7 @@ As you can see, `yaml-rust2` performs better than `yaml-rust` on every benchmark
 
 I'd like to end this section with a small disclaimer: I am not a benchmark expert. I tried to have an heterogenous set
 of files that would highlight how the parser performs when stressed different ways. I invite you to take a look at [the
-code generating the YAML files](https://github.com/Ethiraric/yaml-rust2/tree/master/tools/gen_large_yaml) and, if you
+code generating the YAML files](https://github.com/saphyr-rs/saphyr/tree/master/bench/tools/gen_large_yaml) and, if you
 are more knowledgeable than I am, improve upon them. `yaml-rust2` performs better with these files because those are the
 ones I could work with. If you find a file with which `yaml-rust2` is slower than `yaml-rust`, do file an issue!
 
