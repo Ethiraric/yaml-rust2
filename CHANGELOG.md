@@ -7,7 +7,7 @@
 - `hashlink` was upgraded to v0.12.1.
 - `quickcheck` (dev-only dependency) was upgraded to v1.1.0.
 - `toml` (dev-only dependency) was upgraded to v1.1.4.
-- ([#76](https://github.com/Ethiraric/yaml-rust2/issues/76)) corrected the
+- ([#79](https://github.com/Ethiraric/yaml-rust2/issues/79)) corrected the
   documentation for `Marker::index`.
 
 ## v0.11.1
