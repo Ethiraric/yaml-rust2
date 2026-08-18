@@ -426,7 +426,15 @@ mod encoding {
                     total_bytes_read += bytes_read;
                     // The output is already reserved to the size of the input. We slowly resize. Here,
                     // we're expecting that 10% of bytes will double in size when converting to UTF-8.
-                    output.reserve(input.len() / 10);
+                    //
+                    // Reserve at least 4 additional bytes to guarantee forward progress. A single
+                    // UTF-8 scalar is at most 4 bytes, so reserving 4 ensures there is always room for
+                    // at least one more character each iteration. Without this floor `input.len() / 10`
+                    // is 0 for inputs shorter than 10 bytes, so the buffer never grows: when the
+                    // decoded UTF-8 output is longer than the input (e.g. multi-byte UTF-16), the
+                    // decoder keeps returning `OutputFull` with no capacity gained and the loop spins
+                    // forever, pegging a CPU core (see Ethiraric/yaml-rust2#78).
+                    output.reserve((input.len() / 10).max(4));
                 }
                 (DecoderResult::Malformed(malformed_len, bytes_after_malformed), bytes_read) => {
                     total_bytes_read += bytes_read;
