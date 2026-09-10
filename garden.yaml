@@ -33,6 +33,7 @@ commands:
     cargo bench_compare run_bench
   fix: cargo clippy --all-targets --fix "$@" -- -D warnings
   fmt: cargo fmt "$@"
+  publish: cargo publish "$@"
   test: cargo test "$@"
   update: cargo update "$@"
   watch: cargo watch --shell "garden check"
