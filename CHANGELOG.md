@@ -2,6 +2,10 @@
 
 ## v0.13.0
 
+**Changes**:
+- ([#82](https://github.com/Ethiraric/yaml-rust2/issues/82)) `encoding_rs` was
+  pinned to versions prior to v0.8.40 to maintain the current MSRV.
+
 **Development**:
 - Applied clippy fixes.
 

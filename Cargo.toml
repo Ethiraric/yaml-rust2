@@ -28,7 +28,7 @@ encoding = [ "dep:encoding_rs" ]
 
 [dependencies]
 arraydeque = "0.5.1"
-encoding_rs = { version = "0.8.33", optional = true }
+encoding_rs = { version = "< 0.8.40", optional = true }
 hashlink = "0.12.1"
 
 [dev-dependencies]
