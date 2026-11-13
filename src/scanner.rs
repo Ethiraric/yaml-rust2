@@ -1775,8 +1775,13 @@ impl<T: Iterator<Item = char>> Scanner<T> {
             self.buffer.push_back(c).unwrap();
 
             // We need to manually update our position; we haven't called a `skip` function.
-            self.mark.col += line_buffer.len();
-            self.mark.index += line_buffer.len();
+            // `line_buffer` is a `String`, so its `len()` counts BYTES, while every other
+            // path advances `mark.index`/`mark.col` by one per CHARACTER. Count characters
+            // here so multi-byte content keeps the markers consistent with the `skip_*`
+            // helpers and with the documented `Marker::index` position.
+            let char_count = line_buffer.chars().count();
+            self.mark.col += char_count;
+            self.mark.index += char_count;
 
             // We can now append our bytes to our `string`.
             string.reserve(line_buffer.len());
