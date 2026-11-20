@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.13.1
+
+**Changes**:
+- ([#82](https://github.com/Ethiraric/yaml-rust2/issues/82)) `encoding_rs` was
+  pinned to exactly v0.8.35 to avoid using an upper-bound on non-major versions.
+
 ## v0.13.0
 
 **Changes**:
