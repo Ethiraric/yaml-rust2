@@ -438,3 +438,39 @@ fn test_uri() {
 fn test_uri_escapes() {
     // TODO
 }
+
+#[test]
+fn test_marker_index_stays_character_consistent_after_multibyte_block_scalar() {
+    // The block-scalar content fast path used to advance `mark.index` and
+    // `mark.col` by `line_buffer.len()` — a count of BYTES — while every other
+    // path advances them by one per CHARACTER. With multi-byte content inside
+    // a block scalar, all later markers drifted past their true character
+    // positions, breaking the documented `Marker::index` contract.
+    let s = "work_items:\n- id: W\n  status: ready\n  summary: |\n    第一行说明\n    第二行说明\n  next_action: Before\n  owner: alice\n";
+    let total_chars = s.chars().count();
+    let next_action_chars = s[..s.find("next_action").unwrap()].chars().count();
+
+    let mut p = Scanner::new(s.chars());
+    let mut seen_next_action = false;
+    while let Some(token) = p.next() {
+        let marker = token.0;
+        if let TokenType::Scalar(_, ref v) = token.1 {
+            if v == "next_action" {
+                seen_next_action = true;
+                assert_eq!(
+                    marker.index(), next_action_chars,
+                    "key marker must sit at its character offset after a multibyte block scalar"
+                );
+            }
+        }
+        if let TokenType::StreamEnd = token.1 {
+            assert!(
+                marker.index() <= total_chars,
+                "stream-end marker exceeded the character count: {} > {}",
+                marker.index(),
+                total_chars
+            );
+        }
+    }
+    assert!(seen_next_action);
+}
