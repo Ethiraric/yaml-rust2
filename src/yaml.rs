@@ -618,7 +618,7 @@ impl Yaml {
     /// `None` is returned.
     #[must_use]
     pub fn as_f64(&self) -> Option<f64> {
-        if let Yaml::Real(ref v) = self {
+        if let Yaml::Real(v) = self {
             parse_f64(v)
         } else {
             None
