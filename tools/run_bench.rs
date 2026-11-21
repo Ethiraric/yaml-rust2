@@ -2,9 +2,9 @@
 
 use std::{env, fs::File, io::prelude::*};
 use yaml_rust2::{
+    Event,
     parser::{MarkedEventReceiver, Parser},
     scanner::Marker,
-    Event,
 };
 
 /// A sink which discards any event sent.

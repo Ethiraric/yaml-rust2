@@ -470,8 +470,8 @@ mod encoding {
                             ) {
                                 if error.is_empty() {
                                     break Err(LoadError::Decode(Cow::Owned(format!(
-                                    "Invalid character sequence at {byte_idx}: {malformed_sequence:?}",
-                                ))));
+                                        "Invalid character sequence at {byte_idx}: {malformed_sequence:?}",
+                                    ))));
                                 }
                                 break Err(LoadError::Decode(error));
                             }

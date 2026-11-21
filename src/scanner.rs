@@ -1380,7 +1380,10 @@ impl<T: Iterator<Item = char>> Scanner<T> {
         }
 
         if string.is_empty() {
-            return Err(ScanError::new(start_mark, "while scanning an anchor or alias, did not find expected alphabetic or numeric character"));
+            return Err(ScanError::new(
+                start_mark,
+                "while scanning an anchor or alias, did not find expected alphabetic or numeric character",
+            ));
         }
 
         if alias {
@@ -2106,7 +2109,7 @@ impl<T: Iterator<Item = char>> Scanner<T> {
                 return Err(ScanError::new(
                     *start_mark,
                     "while parsing a quoted scalar, found unknown escape character",
-                ))
+                ));
             }
         }
         self.skip_n_non_blank(2);

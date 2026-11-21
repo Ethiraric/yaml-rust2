@@ -1,11 +1,12 @@
-use libtest_mimic::{run, Arguments, Failed, Trial};
+use libtest_mimic::{Arguments, Failed, Trial, run};
 use std::fs::{self, DirEntry};
 use std::process::ExitCode;
 
 use yaml_rust2::{
+    ScanError, Yaml, YamlLoader,
     parser::{Event, EventReceiver, Parser, Tag},
     scanner::TScalarStyle,
-    yaml, ScanError, Yaml, YamlLoader,
+    yaml,
 };
 
 type Result<T, E = Box<dyn std::error::Error>> = std::result::Result<T, E>;

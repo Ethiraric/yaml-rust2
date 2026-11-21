@@ -577,7 +577,10 @@ impl<T: Iterator<Item = char>> Parser<T> {
                 }
                 Token(mark, TokenType::TagDirective(handle, prefix)) => {
                     if tags.contains_key(handle) {
-                        return Err(ScanError::new(*mark, "the TAG directive must only be given at most once per handle in the same document"));
+                        return Err(ScanError::new(
+                            *mark,
+                            "the TAG directive must only be given at most once per handle in the same document",
+                        ));
                     }
                     tags.insert(handle.clone(), prefix.clone());
                 }
@@ -678,7 +681,7 @@ impl<T: Iterator<Item = char>> Parser<T> {
                             return Err(ScanError::new(
                                 mark,
                                 "while parsing node, found unknown anchor",
-                            ))
+                            ));
                         }
                         Some(id) => return Ok((Event::Alias(*id), mark)),
                     }
@@ -829,10 +832,12 @@ impl<T: Iterator<Item = char>> Parser<T> {
                     if !first {
                         match *self.peek_token()? {
                             Token(_, TokenType::FlowEntry) => self.skip(),
-                            Token(mark, _) => return Err(ScanError::new(
-                                mark,
-                                "while parsing a flow mapping, did not find expected ',' or '}'",
-                            )),
+                            Token(mark, _) => {
+                                return Err(ScanError::new(
+                                    mark,
+                                    "while parsing a flow mapping, did not find expected ',' or '}'",
+                                ));
+                            }
                         }
                     }
 
