@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.13.2
+
+**Changes**:
+- The Rust edition was updated to 2024.
+- ([#82](https://github.com/Ethiraric/yaml-rust2/issues/82)) `encoding_rs` is now pinned
+  to `v0.8` instead of an exact version.
+
 ## v0.13.1
 
 **Changes**:

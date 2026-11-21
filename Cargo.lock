@@ -364,7 +364,7 @@ dependencies = [
 
 [[package]]
 name = "yaml-rust2"
-version = "0.13.1"
+version = "0.13.2"
 dependencies = [
  "arraydeque",
  "encoding_rs",
